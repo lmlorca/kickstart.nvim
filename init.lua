@@ -88,7 +88,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -113,18 +113,23 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
+        -- add = { text = '+' },
+        -- change = { text = '~' },
+        -- delete = { text = '_' },
+        -- topdelete = { text = '‾' },
+        -- changedelete = { text = '~' },
+        add = { hl = 'GitSignsAdd', text = '▎' },
+        change = { hl = 'GitSignsChange', text = '▎' },
+        delete = { hl = 'GitSignsDelete', text = '▎' },
+        topdelete = { hl = 'GitSignsDelete', text = '▎' },
+        changedelete = { hl = 'GitSignsChange', text = '▎' },
       },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
@@ -188,35 +193,6 @@ require('lazy').setup({
       end,
     },
   },
-
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    lazy = false,
-    config = function()
-      require('onedark').setup {
-        -- Set a style preset. 'dark' is default.
-        style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
-      }
-      require('onedark').load()
-    end,
-  },
-
-  {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'auto',
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
-  },
-
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -262,7 +238,7 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -271,7 +247,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -283,6 +259,13 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+
+-- Make relative line numbers default
+vim.wo.relativenumber = true
+
+vim.opt.scrolloff = 8
+vim.opt.colorcolumn = '80'
+vim.opt.showmode = false
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -331,6 +314,42 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- Todo comments
+vim.keymap.set('i', 'jj', '<esc>')
+vim.keymap.set('n', 'J', '<C-d>')
+vim.keymap.set('n', 'K', '<C-u>')
+vim.keymap.set('n', 'gh', 'K')
+
+vim.keymap.set('n', '<leader>q', '<cmd>q<cr>', { desc = 'Quit' })
+vim.keymap.set('n', '<A-q>', '<cmd>q<cr>', { desc = 'Quit' })
+vim.keymap.set('n', 'œ', '<cmd>q<cr>', { desc = 'Quit' })
+vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', { desc = 'Write' })
+vim.keymap.set('n', '<leader>wq', '<cmd>wq<cr>', { desc = 'Write and Quit' })
+vim.keymap.set('n', '<leader>W', '<cmd>wa<cr>', { desc = 'Write All' })
+vim.keymap.set('n', '<leader>WQ', '<cmd>wqa<cr>', { desc = 'Write All and Quit' })
+
+vim.keymap.set('n', '<A-h>', '<C-w>h', { silent = true })
+vim.keymap.set('n', '<A-j>', '<C-w>j', { silent = true })
+vim.keymap.set('n', '<A-k>', '<C-w>k', { silent = true })
+vim.keymap.set('n', '<A-l>', '<C-w>l', { silent = true })
+vim.keymap.set('n', '˙', '<C-w>h', { silent = true })
+vim.keymap.set('n', '∆', '<C-w>j', { silent = true })
+vim.keymap.set('n', '˚', '<C-w>k', { silent = true })
+vim.keymap.set('n', '¬', '<C-w>l', { silent = true })
+
+
+vim.keymap.set('n', '<A-v>', '<cmd>vs<cr> <C-w>l', { silent = true })
+vim.keymap.set('n', '<A-s>', '<cmd>:sp<cr> <C-w>j', { silent = true })
+vim.keymap.set('n', '√', '<cmd>vs<cr> <C-w>l', { silent = true })
+vim.keymap.set('n', 'ß', '<cmd>:sp<cr> <C-w>j', { silent = true })
+
+vim.keymap.set('n', '<leader>tt', '<cmd>tab new<cr>', { silent = true })
+vim.keymap.set('n', '', '<cmd>tabn<cr>', { silent = true })
+vim.keymap.set('n', 'Ô', '<cmd>tabp<cr>', { silent = true })
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -345,14 +364,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
+  defaults = vim.tbl_extend(
+    'force',
+    require('telescope.themes').get_ivy(), -- or get_cursor, get_ivy
+    {
+      mappings = {
+        i = {
+          ['<C-u>'] = false,
+          ['<C-d>'] = false,
+        },
       },
-    },
-  },
+    }
+  ),
 }
 
 -- Enable telescope fzf native, if installed
@@ -400,10 +423,16 @@ vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { d
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
+    -- winblend = 10,
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
+
+local function dropdown(builtin, opts)
+  return function()
+    require('telescope.builtin')[builtin](require('telescope.themes').get_dropdown(opts))
+  end
+end
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
@@ -411,9 +440,10 @@ local function telescope_live_grep_open_files()
     prompt_title = 'Live Grep in Open Files',
   }
 end
+
 vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
-vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>p', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
@@ -524,8 +554,8 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('gh', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('gH', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -632,8 +662,10 @@ cmp.setup {
     completeopt = 'menu,menuone,noinsert',
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    -- ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['J'] = cmp.mapping.select_next_item(),
+    ['K'] = cmp.mapping.select_prev_item(),
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
